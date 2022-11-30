@@ -29,10 +29,10 @@ class messagesController {
             await User.updateOne({username: recipient}, {inMessage: [newMessage, ...userRecipient.inMessage]})
             // console.log('outMessages', userSender.outMessage)
 
-            return res.json({newMessage, status: "Send successfully!"})
+            return res.json({newMessage, status: "Message sent successfully!"})
         } catch (e) {
             console.log(e)
-            res.status(400).json({message: "Send message error"})
+            res.status(400).json({message: "Message sent successfully!"})
         }
     }
 
@@ -44,7 +44,7 @@ class messagesController {
                 return res.status(400).json({message: "User is not found!"})
             }
 
-            res.json(user.inMessage)
+            res.json({inMessage: user.inMessage})
         } catch (e) {
             console.log(e)
             res.status(400).json({message: "Get incoming messages error"})
@@ -59,7 +59,7 @@ class messagesController {
                 return res.status(400).json({message: "User is not found!"})
             }
 
-            res.json(user.outMessage)
+            res.json({outMessage: user.outMessage})
         } catch (e) {
             console.log(e)
             res.status(400).json({message: "Get outgoing messages error"})

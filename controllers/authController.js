@@ -15,10 +15,10 @@ class authController {
     async login(req, res) {
         try {
 
-            // const errors = validationResult(req)
-            // if (!errors.isEmpty()) {
-            //     return res.status(400).json({message: "Empty error"})
-            // }
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({message: "Empty error"})
+            }
 
             const {username} = req.body
 
@@ -29,14 +29,15 @@ class authController {
                 console.log('LOGIN!!!!!!!!', newUser)
                 await newUser.save()
 
-                const token = generateAccessToken(newUser._id)
-                const id = newUser._id
-                return res.json({token, username, id})
+                const resUser = await User.findOne({username})
+                const token = generateAccessToken(resUser._id)
+                const id = resUser._id
+                return res.json({token, username, id, resUser})
             }
-
-                const token = generateAccessToken(user._id)
-                const id = user._id
-                return res.json({token, username, id, user})
+            const resUser = await User.findOne({username})
+                const token = generateAccessToken(resUser._id)
+                const id = resUser._id
+                return res.json({token, username, id, resUser})
         } catch (e) {
             console.log(e)
             res.status(400).json({message: "Login error"})
@@ -46,7 +47,8 @@ class authController {
     async getUsers(req, res) {
         try {
             const users = await User.find()
-            res.json(users)
+            const usernames = users.map(u => u.username)
+            res.json(usernames)
         } catch (e) {
             console.log(e)
             res.status(400).json({message: "Users error"})
@@ -54,19 +56,5 @@ class authController {
 
     }
 
-    // async authMe (req, res) {
-    //     try {
-    //         const user = await User.findOne({_id: req.user.id})
-    //         const token = jwt.sign({id: user._id}, secret, {expiresIn: "1h"})
-    //         const email = user.email
-    //         const id = user._id
-    //         const status = user.status
-    //
-    //         return res.json({token, email, id, status})
-    //     } catch (e) {
-    //         console.log(e)
-    //         return res.status(400).json({message: "Auth error"})
-    //     }
-    // }
 }
 module.exports = new authController()
