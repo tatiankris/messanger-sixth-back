@@ -9,7 +9,7 @@ const corsMiddleware = require('./middleware/cors.middleware')
 
 const app = express()
 const corsOptions = {
-    origin: ['http://localhost:3000'],
+    origin: ['https://messanger-sixth.vercel.app', 'http://localhost:3000'],
     credentials: true,
     optionsSuccessStatus: 200,
     methods: ['GET', 'PUT', 'POST', 'DELETE']
