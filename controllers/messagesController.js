@@ -23,7 +23,9 @@ class messagesController {
                 return res.status(400).json({message: "Recipient is not found!"})
             }
 
-            const newMessage = new Message({sender, recipient, title, message, date: new Date()})
+            let date = 	new Date().setMilliseconds(3 * 60 * 60 * 1000);
+
+            const newMessage = new Message({sender, recipient, title, message, date})
 
             await User.updateOne({username: sender}, {outMessage: [newMessage, ...userSender.outMessage]})
             await User.updateOne({username: recipient}, {inMessage: [newMessage, ...userRecipient.inMessage]})
